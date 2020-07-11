@@ -1,0 +1,14 @@
+C:\Users\felipe.silva\desktop\estudos\AppsDotNet\webAppMaterialControl\bin\Debug\netcoreapp2.2\webAppMaterialControl.deps.json
+C:\Users\felipe.silva\desktop\estudos\AppsDotNet\webAppMaterialControl\bin\Debug\netcoreapp2.2\webAppMaterialControl.runtimeconfig.json
+C:\Users\felipe.silva\desktop\estudos\AppsDotNet\webAppMaterialControl\bin\Debug\netcoreapp2.2\webAppMaterialControl.runtimeconfig.dev.json
+C:\Users\felipe.silva\desktop\estudos\AppsDotNet\webAppMaterialControl\bin\Debug\netcoreapp2.2\webAppMaterialControl.dll
+C:\Users\felipe.silva\desktop\estudos\AppsDotNet\webAppMaterialControl\bin\Debug\netcoreapp2.2\webAppMaterialControl.pdb
+C:\Users\felipe.silva\desktop\estudos\AppsDotNet\webAppMaterialControl\obj\Debug\netcoreapp2.2\webAppMaterialControl.csprojAssemblyReference.cache
+C:\Users\felipe.silva\desktop\estudos\AppsDotNet\webAppMaterialControl\obj\Debug\netcoreapp2.2\webAppMaterialControl.csproj.CoreCompileInputs.cache
+C:\Users\felipe.silva\desktop\estudos\AppsDotNet\webAppMaterialControl\obj\Debug\netcoreapp2.2\webAppMaterialControl.RazorAssemblyInfo.cache
+C:\Users\felipe.silva\desktop\estudos\AppsDotNet\webAppMaterialControl\obj\Debug\netcoreapp2.2\webAppMaterialControl.RazorAssemblyInfo.cs
+C:\Users\felipe.silva\desktop\estudos\AppsDotNet\webAppMaterialControl\obj\Debug\netcoreapp2.2\webAppMaterialControl.AssemblyInfoInputs.cache
+C:\Users\felipe.silva\desktop\estudos\AppsDotNet\webAppMaterialControl\obj\Debug\netcoreapp2.2\webAppMaterialControl.AssemblyInfo.cs
+C:\Users\felipe.silva\desktop\estudos\AppsDotNet\webAppMaterialControl\obj\Debug\netcoreapp2.2\webAppMaterialControl.RazorTargetAssemblyInfo.cache
+C:\Users\felipe.silva\desktop\estudos\AppsDotNet\webAppMaterialControl\obj\Debug\netcoreapp2.2\webAppMaterialControl.dll
+C:\Users\felipe.silva\desktop\estudos\AppsDotNet\webAppMaterialControl\obj\Debug\netcoreapp2.2\webAppMaterialControl.pdb
