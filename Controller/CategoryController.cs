@@ -1,8 +1,4 @@
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using webAppMaterialControl.Api.Data;
 using webAppMaterialControl.Api.Models;
 using webAppMaterialControl.Api.Repositories;
 
@@ -11,38 +7,36 @@ namespace webAppMaterialControl.Api.Controllers
   [Route("v1/categories")]
   public class CategoryController:Controller
   {
-    private readonly MaterialContext _context;
+    private readonly ICategoryRepository _repository;
 
-    public CategoryController(MaterialContext context)
+    public CategoryController(ICategoryRepository repository)
     {
-        _context = context;
+        _repository = repository;
     }
 
     [HttpGet("listar")]
-    public IEnumerable<Category> Listar()
+    public JsonResult Listar()
     {
-      return _context.Categories.AsNoTracking().ToList();
+      return Json(_repository.GetAll());
     }
 
-    [HttpGet("consultar/{id}")]
-    public Category Consultar(int id)
+    [HttpGet("consultar/{id:int}")]
+    public JsonResult Consultar(int id)
     {
-      return _context.Categories.AsNoTracking().Where(x => x.Id == id).FirstOrDefault();
+      return Json(_repository.GetById(id));
     }
 
-    [HttpGet("consultar/{id}/materials")]
-    public IEnumerable<Material> ListarProdutos(int id)
-    {
-      return _context.Materials.AsNoTracking().Where(x => x.CategoryId ==id).ToList();
-    }
+    [HttpGet("consultar/{id:int}/materials")]
+   // public IEnumerable<Material> ListarProdutos(int id)
+   // {
+   //   return _context.Materials.AsNoTracking().Where(x => x.CategoryId ==id).ToList();
+   // }
 
     [HttpPost("criar")]
-    public Category Criar([FromBody] Category category)
+    public IActionResult Criar([FromBody] Category category)
     {
-        _context.Categories.Add(category);
-        _context.SaveChanges();
-
-        return category;
+        _repository.Create(category);
+        return Created("Criado com sucesso", category);
     }
 
     [HttpPut("editar")]
@@ -57,20 +51,17 @@ namespace webAppMaterialControl.Api.Controllers
         return BadRequest();
       }
       
-      _context.Entry<Category>(category).State = EntityState.Modified;
-      _context.SaveChanges();
+      _repository.Alter(category);
 
       return Created("Alterado com sucesso",category);
     }
 
-    [HttpDelete("Remover")]
-    public IActionResult Remover([FromBody] Category category)
+    [HttpDelete("remover/{id:int}")]
+    public IActionResult Remover(int id)
     {
-
-      _context.Categories.Remove(category);
-      _context.SaveChanges();
-
+      _repository.Remove(id);
       return Ok("Removido");
+
     }
 
 

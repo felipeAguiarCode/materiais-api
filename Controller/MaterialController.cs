@@ -1,9 +1,6 @@
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using webAppMaterialControl.Api.Data;
 using webAppMaterialControl.Api.Models;
+using webAppMaterialControl.Api.Repositories;
 
 namespace webAppMaterialControl.Api.Controllers
 {
@@ -12,62 +9,64 @@ namespace webAppMaterialControl.Api.Controllers
   public class MaterialController:Controller
   {
 
-       private readonly MaterialContext _context;
+    private readonly IMaterialRepository _repository;
 
-    public MaterialController(MaterialContext context)
+    public MaterialController(IMaterialRepository repository)
     {
-        _context = context;
+        _repository = repository;
     }
 
     [HttpGet("listar")]
-    public IEnumerable<Material> Listar()
+    public JsonResult Listar()
     {
-      return _context.Materials.AsNoTracking().ToList();
+      return Json(_repository.GetAll());
     }
 
-    [HttpGet("consultar/{id}")]
-    public Material Consultar(int id)
-    {
-      return _context.Materials.AsNoTracking().Where(x => x.CategoryId == id).FirstOrDefault();
-    }
+     [HttpGet("consultar/{id:int}")]
+     public JsonResult Consultar(int id)
+     {
+       var result = _repository.GetById(id);
+       return Json(result);
+     }
 
-    [HttpPost("criar")]
-    public IActionResult Criar([FromBody]Material material)
-    {
-      _context.Materials.Add(material);
-      _context.SaveChanges();
+     [HttpPost("criar")]
+     public IActionResult Criar([FromBody]Material material)
+     {
+        _repository.Create(material);
 
-      return Created("Criado com sucesso",material);
-    }
+        return Created("Criado com sucesso",material);
+     }
 
-    [HttpPut("editar")]
-    public IActionResult Editar([FromBody] Material material)
-    {
-      if(material == null)
-      {
-        return BadRequest();
-      }
+     [HttpPut("editar")]
+     public IActionResult Editar([FromBody] Material material)
+     {
+       if(material == null)
+       {
+         return BadRequest();
+       }
 
-      if(!ModelState.IsValid){
-        return BadRequest();
-      }
+       if(!ModelState.IsValid){
+         return BadRequest();
+       }
 
-      return Created("Alterado com sucesso",material);
-    }
+       _repository.Alter(material);
+
+       return Created("Alterado com sucesso",material);
+     }
 
 
 
-    [HttpDelete("remover")]
-    public IActionResult Remover([FromBody] Material material)
-    {
-      _context.Materials.Remove(material);
-      _context.SaveChanges();
+     [HttpDelete("remover/{id:int}")]
+     public IActionResult Remover(int id)
+     {
+       _repository.Remove(id);
+       return Ok("Removido");
 
-      return Ok("Removido");
-    }
+     }
 
 
 
   }
 
 }
+

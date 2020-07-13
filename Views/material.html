@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+   <!-- Meta tags -->
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+   <!-- Bootstrap CSS -->
+   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+</head>
+<body>
+  
+  <!--Navbar-->
+<nav class="navbar navbar-expand-md navbar-light bg-light">
+
+  <a href="#" class="navbar-brand">ESTOQUE DE MATERIAIS</a>
+
+  <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+      <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarCollapse">
+      <div class="navbar-nav">
+          <a href="index.html" class="nav-item nav-link active">Categoria</a>
+          <a href="material.html" class="nav-item nav-link">Materiais</a>
+      </div>
+  </div>
+</nav>
+  <!--/.Navbar-->
+
+<div id="container" style="margin-top:10px; margin-left: 20px;">
+  <h2 id="titulo">Cadastrar Materiais</h2>
+  <div id="container" class="col-md-8">
+    <div>
+      <div>
+        <label for="ipt-nome">Nome material</label>
+        <input type="text" class="form-control" id="ipt-nome" required>
+
+        <label for="ipt-descricao">Descrição</label>
+        <input type="text" class="form-control" id="ipt-descricao" required>
+
+        <label for="ipt-quantidade">Quantidade</label>
+        <input type="number" class="form-control" id="ipt-quantidade" required>
+
+        <label for="ipt-preco">Preço unitário</label>
+        <input input type="number" step="0.01" min="0" max="1000" class="form-control" id="ipt-preco" required>
+
+        <label for="lista-categoria">Categoria</label>
+        <select name="select-categorias" id="lista-categoria" class="form-control">
+        </select>
+
+      </div>
+    </div>
+  
+    <div style="margin-top: 10px;">
+        <button id="btnSalvar" onclick="objectoFactory()" class="btn btn-primary">Cadastrar</button>
+        <button id="btnEditar" onclick="objectoFactory(jsonDocument.id)" class="btn btn-primary">Salvar</button>
+        <button id="btnCancelar" onclick="Cancelar()" class="btn btn-Warning" >Limpar</button>
+    </div>
+  
+    <table style="margin-top: 30px;" class="table">
+        <thead>
+          <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Nome</th>
+            <th scope="col">Descrição</th>
+            <th scope="col">Quantidade</th>
+            <th scope="col">Preço Unitário</th>
+            <th scope="col">Categoria Id</th>
+            <th>Opções</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+  </div>
+</div>
+
+
+  <script >
+      var tbody = document.querySelector('table tbody');
+      var jsonDocument;
+      
+      var btnSalvar = document.querySelector('#btnSalvar');
+      var btnCancelar = document.querySelector('#btnCancelar');
+      var btnEditar = document.querySelector('#btnEditar');
+      var titulo = document.querySelector('#titulo');
+
+      btnEditar.style.display = 'none';
+
+      function objectoFactory(ObjectId){
+        var _nome = document.getElementById("ipt-nome").value;
+        var _descricao = document.getElementById("ipt-descricao").value;
+        var _quantidade = document.getElementById("ipt-quantidade").value;
+        var _precoUnitario = document.getElementById("ipt-preco").value;
+        var _categoriaId = document.getElementById("lista-categoria");
+
+        var _categoriaIdSelecionada = _categoriaId.options[_categoriaId.selectedIndex].value;
+        
+        console.log(_categoriaIdSelecionada);
+
+
+        if(ObjectId === undefined){
+          
+          jsonDocument ={
+            Name: _nome,
+            Description: _descricao,
+            Quantity: _quantidade,
+            UnitPrice: _precoUnitario,
+            CategoryId: _categoriaIdSelecionada,
+            createDate: new Date()
+          }
+        
+          Cadastrar(jsonDocument);
+          
+        }else{
+
+          jsonDocument ={
+            Id: ObjectId,
+            Name: _nome,
+            Description: _descricao,
+            Quantity: _quantidade,
+            UnitPrice: _precoUnitario,
+            CategoryId: _categoriaIdSelecionada,
+            lastUpdateDate: new Date()
+          }
+
+          Editar(jsonDocument);
+          Cancelar();
+
+        }
+
+        Listar();
+
+      }
+
+      function Cadastrar(objeto)
+      {
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST','http://localhost:5000/v1/materials/criar',false);
+        xhr.setRequestHeader('content-type','application/json');     
+        xhr.send(JSON.stringify(objeto));
+      
+      }
+
+      function Editar(objeto){
+        let xhr = new XMLHttpRequest();
+        xhr.open('PUT','http://localhost:5000/v1/materials/editar',false);
+        xhr.setRequestHeader('content-type','application/json');
+        xhr.send(JSON.stringify(objeto));
+      }   
+      
+      function Deletar(id){
+        let xhr = new XMLHttpRequest();
+        xhr.open('DELETE',`http://localhost:5000/v1/materials/remover/${id}`,false);
+        xhr.send();
+        
+        Listar();
+      }
+
+      function Listar(){
+        tbody.innerHTML = '';
+
+        let xhr = new XMLHttpRequest();
+        xhr.open('GET',`http://localhost:5000/v1/materials/listar`,true);
+
+        xhr.onload = function(){
+           var listagem = JSON.parse(this.responseText);
+          
+           for (let c in listagem){
+                AdicionarLinhas(listagem[c]);
+           }
+          
+        }
+
+        xhr.send();
+    }
+      
+
+      //FUNÇÕES DE APOIO
+      function ListarCategorias(){
+        let xhr = new XMLHttpRequest();        
+        xhr.open('GET','http://localhost:5000/v1/categories/listar',false);
+
+        xhr.onload = function(){
+          var listaCategorias = JSON.parse(this.responseText)
+          var dropCategoria = document.getElementById("lista-categoria");
+          var _option;
+          var _value;
+          
+          
+          for(c in listaCategorias){
+            
+
+            _option= document.createElement("option");
+            _option.text = listaCategorias[c].categoryName;
+            
+            _value = document.createAttribute("value");
+            _value.value = listaCategorias[c].id;
+            
+            _option.setAttributeNode(_value);
+
+            dropCategoria.add(_option);  
+          }
+
+
+
+
+        }
+
+        xhr.send();
+      }
+
+
+      function AdicionarLinhas(material){
+   
+      
+        var trow = `<tr>
+                        <td>${material.id}</td>
+                        <td>${material.name}</td>
+                        <td>${material.description}</td>
+                        <td>${material.quantity}</td>
+                        <td>${material.unitPrice}</td>
+                        <td>${material.categoryId}</td>
+                        <td>
+                          <button onClick='editarLinha(${JSON.stringify(material)})' class='btn btn-Warning'>Editar</button>
+                          <button onClick='Deletar(${JSON.stringify(material.id)})' class='btn btn-danger'>Deletar</button>
+                        </td>
+                    <tr>`;
+                      
+        tbody.innerHTML += trow;
+      }
+
+      function editarLinha(objecto){
+
+        btnEditar.style.display = 'inline-block';
+        btnSalvar.style.display = 'none';
+        
+        jsonDocument = objecto;
+
+        
+
+        titulo.textContent = `Editar Material ` + objecto.name;
+
+        //campos
+        document.getElementById("ipt-nome").value = objecto.name; 
+        document.getElementById("ipt-descricao").value = objecto.description;
+        document.getElementById("ipt-quantidade").value = objecto.quantity;
+        document.getElementById("ipt-preco").value = objecto.unitPrice;
+        document.getElementById("lista-categoria").value = objecto.categoryId; 
+        
+
+      }
+
+      function Cancelar(){
+
+        btnEditar.style.display = 'none';
+        btnSalvar.style.display = 'inline-block';
+
+        titulo.textContent = 'Cadastrar';
+        
+        ResetarTela();
+
+      }
+
+      function ResetarTela(){
+
+        //campos
+        document.getElementById("ipt-nome").value = '';
+        document.getElementById("ipt-descricao").value = '';
+        document.getElementById("ipt-quantidade").value = '';
+        document.getElementById("ipt-preco").value = '';
+      
+      }
+      
+
+
+      Listar();
+      ListarCategorias();
+  </script>  
+
+
+   <!-- JS Dependências do Bootstrap -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+</body>
+</html>
