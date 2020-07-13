@@ -1,6 +1,10 @@
 <h1 align="center">
-   API DE CONTROLE DE ESTOQUE DE MATERIAL
+   API DE CONTROLE DE ESTOQUE DE MATERIAIS
 </h1>
+
+<p align="center">
+  <img width="460" height="300" src="https://blog.fortestecnologia.com.br/wp-content/uploads/2017/08/conheca-os-5-passos-para-controlar-bem-o-seu-estoque.png">
+</p>
 
 </br>
   <p align="center">Controle de estoque de materiais através de uma API utilizando ASP.NET CORE</p>
