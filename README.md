@@ -4,8 +4,7 @@
 
 </br>
   <p align="center">Controle de estoque de materiais através de uma API utilizando ASP.NET CORE</p>
-  <img align="center" src="https://blog.fortestecnologia.com.br/wp-content/uploads/2017/08/conheca-os-5-passos-para-controlar-bem-o-seu-estoque.png" heigth="40px" />
-
+ 
 <p align="center">
   <a href="#white_check_mark-Features">Features</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#globe_with_meridians-Tecnologias">Tecnologias</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
