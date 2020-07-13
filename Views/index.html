@@ -42,6 +42,7 @@
         <button id="btnSalvar" onclick="objectoFactory()" class="btn btn-primary">Cadastrar</button>
         <button id="btnEditar" onclick="objectoFactory(jsonDocument.id)" class="btn btn-primary">Salvar</button>
         <button id="btnCancelar" onclick="Cancelar()" class="btn btn-Warning" >Limpar</button>
+        <button id="btnConsultar" onclick="BotaoConsultar()" class="btn btn-info" >Consultar</button>
     </div>
   
     <table style="margin-top: 30px;" class="table">
@@ -122,6 +123,20 @@
         Listar();
       }
 
+      function Consultar(objectID){
+        let xhr = new XMLHttpRequest();
+        xhr.open('GET',`http://localhost:5000/v1/categories/consultar/${objectID}`,false);
+        
+
+        xhr.onload = function(){
+           var objetoSelecionado = JSON.parse(this.responseText);          
+           jsonDocument = objetoSelecionado 
+           editarLinha(jsonDocument);
+        }
+
+        xhr.send();
+      }   
+
       function Listar(){
         tbody.innerHTML = '';
 
@@ -160,7 +175,8 @@
 
         btnEditar.style.display = 'inline-block';
         btnSalvar.style.display = 'none';
-        
+     
+
         jsonDocument = objecto;
 
         titulo.textContent = `Editar Categoria ` + objecto.categoryName;
@@ -185,6 +201,11 @@
 
         //campos
         document.getElementById("ipt-nome").value = '';
+      }
+
+      function BotaoConsultar(){
+        var IdPesquisado = prompt("Entre com um Id para consultar", 1);
+        Consultar(IdPesquisado);
       }
 
 
